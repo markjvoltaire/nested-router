@@ -86,6 +86,69 @@ const pokemonTypes = [
   },
 ];
 
+function Main() {
+  return <h1>Pokedex</h1>;
+}
+
+function Pokemon() {}
+
+function PokemonList() {
+  const { url, path } = useRouteMatch();
+  const { categoryId } = useParams();
+
+  const category = pokemonTypes.find(({ id }) => id === categoryId);
+
+  return (
+    <div>
+      <h2>test{category.category}</h2>
+      <span>
+        {category.pokemon.map((poke) => {
+          return (
+            <p key={poke.id}>
+              <Link to={`${url}/${poke.id}`}>{poke.name}</Link>
+            </p>
+          );
+        })}
+      </span>
+      <Route path={`${path}/:pokemonId`}>
+        <Pokemon />
+      </Route>
+    </div>
+  );
+}
+
+function Categories() {
+  const { url, path } = useRouteMatch();
+
+  return (
+    <div>
+      <h2>Types</h2>
+      <span>
+        {pokemonTypes.map(({ category, id }) => {
+          return (
+            <p key={id}>
+              <Link to={`${url}/${id}`}>{category}</Link>
+            </p>
+          );
+        })}
+      </span>
+    </div>
+  );
+}
+
 export default function App() {
-  return <div></div>;
+  return (
+    <Router>
+      <div>
+        <Link to="/">Home</Link>
+        <Link to="/categories">Categories</Link>
+        <Route exact path="/">
+          <Main />
+        </Route>
+        <Route exact path="/categories">
+          <PokemonList />
+        </Route>
+      </div>
+    </Router>
+  );
 }
